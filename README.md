@@ -245,7 +245,7 @@ public Object echoDemo(@RequestBody DemoMessage demoMessage, @RequestHeader(name
 ```java
 <dependency>
    <groupId>com.dalong</groupId>
-    <artifactId>nats-rpc-springboot-starter-webmvc-springdoc</artifactId>
-    <version>1.0-SNAPSHOT</version>
+   <artifactId>nats-rpc-springboot-starter-webmvc-springdoc</artifactId>
+   <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
