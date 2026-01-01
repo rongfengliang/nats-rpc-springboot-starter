@@ -11,6 +11,8 @@
     <modules>
         <module>nats-rpc-core</module>
         <module>nats-rpc-springboot-starter</module>
+        <module>nats-rpc-springboot-starter-webmvc</module>
+        <module>nats-rpc-springboot-starter-webmvc-springdoc</module>
     </modules>
 
     <properties>
