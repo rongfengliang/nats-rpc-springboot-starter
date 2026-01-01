@@ -213,3 +213,39 @@ public class RpcDemoApplication {
     }
 }
 ```
+
+### 6. export rest api
+
+* add dependency
+
+```xml
+<dependency>
+    <groupId>com.dalong</groupId>
+    <artifactId>nats-rpc-springboot-starter-webmvc</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+```
+
+* handler add method annotation 
+
+```java
+public  Object echoDemo(DemoMessage demoMessage, Headers headers) {
+    return demoMessage;
+}
+
+@ResponseBody
+@ServiceMapping(path = {"/appdemo"},method = {"POST"})
+public Object echoDemo(@RequestBody DemoMessage demoMessage, @RequestHeader(name = "token", required = false) String token){
+    return echoDemo(demoMessage, new Headers());
+}
+```
+
+### 7. rest api springdoc support
+
+```java
+<dependency>
+   <groupId>com.dalong</groupId>
+    <artifactId>nats-rpc-springboot-starter-webmvc-springdoc</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+```
