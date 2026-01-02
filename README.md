@@ -242,7 +242,11 @@ public Object echoDemo(@RequestBody DemoMessage demoMessage, @RequestHeader(name
 ```
 ### 7. rest api spring mvc support
 
+extend RestApiAbstractServiceHandler
+
 ```java
+public class DemoNatsServiceHandler extends RestApiAbstractServiceHandler<DemoMessage> {
+
 @ResponseBody
 @ServiceMapping(
         name = "defaultRestApiHandler",
@@ -252,8 +256,11 @@ public Object echoDemo(@RequestBody DemoMessage demoMessage, @RequestHeader(name
 )
 public Object defaultRestApiHandler(@RequestBody DemoMessage demoMessage, @Parameter(hidden = true) @RequestHeader(required = false) HttpHeaders httpHeaders){
     return restApiHandler(demoMessage, httpHeaders);
+ }
 }
+
 ```
+
 
 ### 8. rest api springdoc support
 
