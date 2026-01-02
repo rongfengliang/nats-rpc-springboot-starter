@@ -3,6 +3,7 @@ package com.dalong.bean;
 import com.dalong.autoconfigure.config.ServiceMapping;
 import com.dalong.handler.ServiceHandler;
 import com.dalong.util.methodutils;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -24,9 +25,12 @@ public class NatsRpcRestApiRegistor {
     public void registerRestApis() {
         serviceHandlers.forEach(serviceHandler -> {
             Class<?> targetClass =
-                    org.springframework.aop.support.AopUtils.getTargetClass(serviceHandler);
+                    AopProxyUtils.ultimateTargetClass(serviceHandler);
             Method[] methods = targetClass.getDeclaredMethods();
             Arrays.stream(methods).forEach(method -> {
+                if(method.isBridge()){
+                    return;
+                }
                 ServiceMapping serviceMapping = method.getAnnotation(ServiceMapping.class);
                 if (serviceMapping == null) {
                     return;

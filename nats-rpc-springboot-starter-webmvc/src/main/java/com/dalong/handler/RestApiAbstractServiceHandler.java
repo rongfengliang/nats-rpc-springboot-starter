@@ -9,6 +9,10 @@ import java.lang.reflect.Method;
 import static com.dalong.helper.MessageHelper.actionMethodExecute;
 
 public abstract class RestApiAbstractServiceHandler<T extends BaseMessage> extends AbstractServiceHandler<T> {
+
+    public <R> R defaultRestApiHandler(T demoMessage,   HttpHeaders httpHeaders){
+        return restApiHandler(demoMessage, httpHeaders);
+    }
     public <R> R restApiHandler(T baseMessage, HttpHeaders headers) {
         Method actionMethod = actionMethod(baseMessage);
         Headers natsHeaders;
