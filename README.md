@@ -240,8 +240,22 @@ public Object echoDemo(@RequestBody DemoMessage demoMessage, @RequestHeader(name
     return echoDemo(demoMessage, new Headers());
 }
 ```
+### 7. rest api spring mvc support
 
-### 7. rest api springdoc support
+```java
+@ResponseBody
+@ServiceMapping(
+        name = "defaultRestApiHandler",
+        path = {"/api/default/rest/"},
+        method = {"POST"},
+        version = "1.0.0"
+)
+public Object defaultRestApiHandler(@RequestBody DemoMessage demoMessage, @Parameter(hidden = true) @RequestHeader(required = false) HttpHeaders httpHeaders){
+    return restApiHandler(demoMessage, httpHeaders);
+}
+```
+
+### 8. rest api springdoc support
 
 ```java
 <dependency>
