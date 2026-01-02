@@ -259,6 +259,19 @@ public Object defaultRestApiHandler(@RequestBody DemoMessage demoMessage, @Param
  }
 }
 
+or
+
+@ResponseBody
+@ServiceMapping(
+        name = "defaultRestApiHandler",
+        path = {"/api/default/rest/"},
+        method = {"POST"},
+        version = "1.0.0"
+)
+@Override
+public Object defaultRestApiHandler(@RequestBody  DemoMessage demoMessage, @Parameter(hidden = true) HttpHeaders httpHeaders) {
+    return super.defaultRestApiHandler(demoMessage, httpHeaders);
+}
 ```
 
 
