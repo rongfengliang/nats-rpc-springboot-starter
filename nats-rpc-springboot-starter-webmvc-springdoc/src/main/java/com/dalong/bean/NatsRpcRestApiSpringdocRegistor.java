@@ -24,7 +24,7 @@ public class NatsRpcRestApiSpringdocRegistor {
         serviceHandlers.forEach(new Consumer<ServiceHandler>() {
             @Override
             public void accept(ServiceHandler serviceHandler) {
-                Method[] methods = serviceHandler.getClass().getMethods();
+                Method[] methods = serviceHandler.getClass().getDeclaredMethods();
                 Arrays.stream(methods).forEach(new Consumer<Method>() {
                     @Override
                     public void accept(Method method) {

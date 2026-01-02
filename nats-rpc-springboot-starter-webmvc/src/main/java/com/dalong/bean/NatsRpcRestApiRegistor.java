@@ -25,12 +25,17 @@ public class NatsRpcRestApiRegistor {
         serviceHandlers.forEach(new Consumer<ServiceHandler>() {
             @Override
             public void accept(ServiceHandler serviceHandler) {
-                Method[] methods = serviceHandler.getClass().getMethods();
+                Class<?> targetClass =
+                        org.springframework.aop.support.AopUtils.getTargetClass(serviceHandler);
+                Method[] methods = targetClass.getDeclaredMethods();
                 Arrays.stream(methods).forEach(new Consumer<Method>() {
                     @Override
                     public void accept(Method method) {
                         ServiceMapping serviceMapping = method.getAnnotation(ServiceMapping.class);
                         if (serviceMapping == null) {
+                            return;
+                        }
+                        if (method.getDeclaringClass() != targetClass) {
                             return;
                         }
                         RequestMappingInfo mapping = RequestMappingInfo
