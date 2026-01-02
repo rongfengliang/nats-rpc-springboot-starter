@@ -21,21 +21,15 @@ public class NatsRpcRestApiSpringdocRegistor {
     }
 
     public void registerRestApis() {
-        serviceHandlers.forEach(new Consumer<ServiceHandler>() {
-            @Override
-            public void accept(ServiceHandler serviceHandler) {
-                Method[] methods = serviceHandler.getClass().getDeclaredMethods();
-                Arrays.stream(methods).forEach(new Consumer<Method>() {
-                    @Override
-                    public void accept(Method method) {
-                        ServiceMapping serviceMapping = method.getAnnotation(ServiceMapping.class);
-                        if (serviceMapping == null) {
-                            return;
-                        }
-                        SpringDocUtils.getConfig().addRestControllers(serviceHandler.getClass());
-                    }
-                });
-            }
+        serviceHandlers.forEach(serviceHandler -> {
+            Method[] methods = serviceHandler.getClass().getDeclaredMethods();
+            Arrays.stream(methods).forEach(method -> {
+                ServiceMapping serviceMapping = method.getAnnotation(ServiceMapping.class);
+                if (serviceMapping == null) {
+                    return;
+                }
+                SpringDocUtils.getConfig().addRestControllers(serviceHandler.getClass());
+            });
         });
     }
 

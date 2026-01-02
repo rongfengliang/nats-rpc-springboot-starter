@@ -22,31 +22,25 @@ public class NatsRpcRestApiRegistor {
     }
 
     public void registerRestApis() {
-        serviceHandlers.forEach(new Consumer<ServiceHandler>() {
-            @Override
-            public void accept(ServiceHandler serviceHandler) {
-                Class<?> targetClass =
-                        org.springframework.aop.support.AopUtils.getTargetClass(serviceHandler);
-                Method[] methods = targetClass.getDeclaredMethods();
-                Arrays.stream(methods).forEach(new Consumer<Method>() {
-                    @Override
-                    public void accept(Method method) {
-                        ServiceMapping serviceMapping = method.getAnnotation(ServiceMapping.class);
-                        if (serviceMapping == null) {
-                            return;
-                        }
-                        if (method.getDeclaringClass() != targetClass) {
-                            return;
-                        }
-                        RequestMappingInfo mapping = RequestMappingInfo
-                                .paths(serviceMapping.path())
-                                .methods(Arrays.stream(serviceMapping.method()).map(item -> methodutils.str2RequestMethod(item)).toArray(RequestMethod[]::new))
-                                .build();
-                        Method handlerMethod = method;
-                        requestMappingHandlerMapping.registerMapping(mapping, serviceHandler, handlerMethod);
-                    }
-                });
-            }
+        serviceHandlers.forEach(serviceHandler -> {
+            Class<?> targetClass =
+                    org.springframework.aop.support.AopUtils.getTargetClass(serviceHandler);
+            Method[] methods = targetClass.getDeclaredMethods();
+            Arrays.stream(methods).forEach(method -> {
+                ServiceMapping serviceMapping = method.getAnnotation(ServiceMapping.class);
+                if (serviceMapping == null) {
+                    return;
+                }
+                if (method.getDeclaringClass() != targetClass) {
+                    return;
+                }
+                RequestMappingInfo mapping = RequestMappingInfo
+                        .paths(serviceMapping.path())
+                        .methods(Arrays.stream(serviceMapping.method()).map(item -> methodutils.str2RequestMethod(item)).toArray(RequestMethod[]::new))
+                        .build();
+                Method handlerMethod = method;
+                requestMappingHandlerMapping.registerMapping(mapping, serviceHandler, handlerMethod);
+            });
         });
     }
 
