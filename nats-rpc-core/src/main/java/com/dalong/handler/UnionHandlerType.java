@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SubMessageHandlerType {
+public @interface UnionHandlerType {
     String typeValue();
 
     String version() default "1.0.0";
@@ -19,6 +19,8 @@ public @interface SubMessageHandlerType {
     String description() default "";
 
     String subjectName() default "";
+
+    String endpointName() default "";
 
     Class<? extends BaseMessage> messageClass();
 }

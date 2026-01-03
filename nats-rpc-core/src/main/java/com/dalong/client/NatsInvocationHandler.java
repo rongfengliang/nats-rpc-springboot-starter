@@ -16,13 +16,15 @@ public class NatsInvocationHandler implements InvocationHandler {
     private final Connection nats;
     private final ObjectMapper objectMapper;
     private Duration timeout = Duration.ofSeconds(120);
-    public NatsInvocationHandler(Connection nats, ObjectMapper objectMapper,Duration timeout) {
+
+    public NatsInvocationHandler(Connection nats, ObjectMapper objectMapper, Duration timeout) {
         this.nats = nats;
         this.objectMapper = objectMapper;
-        if(timeout != null){
+        if (timeout != null) {
             this.timeout = timeout;
         }
     }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass() == Object.class) {
@@ -34,11 +36,11 @@ public class NatsInvocationHandler implements InvocationHandler {
         String subject = "";
         byte[] req = null;
         Headers headers = null;
-        if(args.length==3 && (args[0] instanceof String)){
+        if (args.length == 3 && (args[0] instanceof String)) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
                     service.serviceName(),
-                    (String)args[0],
+                    (String) args[0],
                     service.serviceEndpoint()
             );
             BaseMessage msg = (BaseMessage) args[1];
@@ -48,11 +50,11 @@ public class NatsInvocationHandler implements InvocationHandler {
             req = objectMapper.writeValueAsBytes(msg);
             headers = (Headers) args[2];
         }
-        if (args.length==2 && (args[0] instanceof String)){
+        if (args.length == 2 && (args[0] instanceof String)) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
                     service.serviceName(),
-                    (String)args[0],
+                    (String) args[0],
                     service.serviceEndpoint()
             );
             BaseMessage msg = (BaseMessage) args[1];
@@ -62,7 +64,7 @@ public class NatsInvocationHandler implements InvocationHandler {
             req = objectMapper.writeValueAsBytes(msg);
         }
 
-        if (args.length==2 && (args[0] instanceof String)==false){
+        if (args.length == 2 && (args[0] instanceof String) == false) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
                     service.serviceName(),
@@ -76,7 +78,7 @@ public class NatsInvocationHandler implements InvocationHandler {
             req = objectMapper.writeValueAsBytes(msg);
             headers = (Headers) args[1];
         }
-        if(args.length==1) {
+        if (args.length == 1) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
                     service.serviceName(),
@@ -99,19 +101,19 @@ public class NatsInvocationHandler implements InvocationHandler {
             return null;
         }
         Message msg;
-        if(headers != null) {
+        if (headers != null) {
             msg = nats.request(subject, headers, req, timeout);
         } else {
             msg = nats.request(subject, req, timeout);
         }
-        
+
         // 检查响应是否为空（可能因为超时或服务不可用）
         if (msg == null) {
             throw new RuntimeException(String.format(
                     "RPC 调用失败: 服务 %s 未响应 (subject: %s, timeout: %s秒). 请检查服务是否已启动且可访问。",
                     service.serviceName(), subject, timeout.getSeconds()));
         }
-        
+
         return objectMapper.readValue(msg.getData(), javaType);
     }
 }

@@ -17,6 +17,7 @@ public class NatsMsgClientFactoryBean<T> implements FactoryBean<T> {
         this.connection = connection;
         this.objectMapper = objectMapper;
     }
+
     @Nullable
     @Override
     public T getObject() throws Exception {

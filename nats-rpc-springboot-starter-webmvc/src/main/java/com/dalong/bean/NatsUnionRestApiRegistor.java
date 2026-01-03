@@ -1,7 +1,9 @@
 package com.dalong.bean;
 
 import com.dalong.autoconfigure.config.ServiceMapping;
+import com.dalong.autoconfigure.config.UnionMapping;
 import com.dalong.handler.ServiceHandler;
+import com.dalong.handler.UnionHandler;
 import com.dalong.util.methodutils;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,11 +14,11 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
-public class NatsRpcRestApiRegistor {
+public class NatsUnionRestApiRegistor {
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
-    private List<ServiceHandler> serviceHandlers;
+    private List<UnionHandler> serviceHandlers;
 
-    public NatsRpcRestApiRegistor(RequestMappingHandlerMapping requestMappingHandlerMapping, List<ServiceHandler> serviceHandlers) {
+    public NatsUnionRestApiRegistor(RequestMappingHandlerMapping requestMappingHandlerMapping, List<UnionHandler> serviceHandlers) {
         this.requestMappingHandlerMapping = requestMappingHandlerMapping;
         this.serviceHandlers = serviceHandlers;
     }
@@ -30,7 +32,7 @@ public class NatsRpcRestApiRegistor {
                 if (method.isBridge()) {
                     return;
                 }
-                ServiceMapping serviceMapping = method.getAnnotation(ServiceMapping.class);
+                UnionMapping serviceMapping = method.getAnnotation(UnionMapping.class);
                 if (serviceMapping == null) {
                     return;
                 }

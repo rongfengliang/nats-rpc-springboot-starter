@@ -27,6 +27,7 @@ public class NatsMsgClientsRegistrar implements ImportBeanDefinitionRegistrar {
             }
         };
     }
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         Map<String, Object> attributes = importingClassMetadata
@@ -38,8 +39,8 @@ public class NatsMsgClientsRegistrar implements ImportBeanDefinitionRegistrar {
                     importingClassMetadata.getClassName().lastIndexOf("."))};
         }
 
-        ClassPathScanningCandidateComponentProvider  scanner = getScanner();
-        scanner.addIncludeFilter(new AnnotationTypeFilter(MsgClient.class,true));
+        ClassPathScanningCandidateComponentProvider scanner = getScanner();
+        scanner.addIncludeFilter(new AnnotationTypeFilter(MsgClient.class, true));
 
         for (String basePackage : basePackages) {
             scanner.findCandidateComponents(basePackage).forEach(beanDef -> {

@@ -1,11 +1,14 @@
-package com.dalong.handler;
+package com.dalong.autoconfigure.config;
+
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ServiceMapping {
+@Component
+public @interface UnionMapping {
     String name() default "";
 
     String[] path() default {};

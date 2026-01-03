@@ -2,6 +2,7 @@ package com.dalong.autoconfigure;
 
 import com.dalong.apihandlers.NatsMsgServiceHandler;
 import com.dalong.apihandlers.NatsRpcServiceHandler;
+import com.dalong.apihandlers.NatsUnionServiceHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -14,7 +15,8 @@ import org.springframework.context.annotation.Import;
 )
 @Import(value = {
         NatsMsgServiceHandler.class,
-        NatsRpcServiceHandler.class
+        NatsRpcServiceHandler.class,
+        NatsUnionServiceHandler.class
 })
 public class NatsApiGateWayAutoConfigure {
 }

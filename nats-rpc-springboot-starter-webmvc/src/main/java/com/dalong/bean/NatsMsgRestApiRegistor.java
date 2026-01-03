@@ -27,7 +27,7 @@ public class NatsMsgRestApiRegistor {
                     AopProxyUtils.ultimateTargetClass(subMessageHandler);
             Method[] methods = targetClass.getMethods();
             Arrays.stream(methods).forEach(method -> {
-                if(method.isBridge()){
+                if (method.isBridge()) {
                     return;
                 }
                 MsgMapping msgMapping = method.getAnnotation(MsgMapping.class);

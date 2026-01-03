@@ -1,14 +1,19 @@
 package com.dalong.apihandlers;
 
+import com.dalong.autoconfigure.config.MsgMapping;
 import com.dalong.autoconfigure.config.ServiceMapping;
-import com.dalong.handler.RestApiAbstractServiceHandler;
-import com.dalong.handler.ServiceHandlerType;
+import com.dalong.autoconfigure.config.UnionMapping;
+import com.dalong.handler.MsgApiAbstractMsgHandler;
+import com.dalong.handler.SubMessageHandlerType;
+import com.dalong.handler.UnionHandlerType;
+import com.dalong.handler.UnionRestApiAbstractServiceHandler;
 import com.dalong.models.BaseMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.nats.client.Connection;
 import io.nats.client.impl.Headers;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,20 +21,21 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
-@ServiceHandlerType(
+@UnionHandlerType(
         typeValue = "apigatewayservice",
         version = "1.0.0",
         scope = "global",
-        description = "apigatewayservice",
-        endpointName = "apigatewayservice",
+        endpointName = "apigatewayservicev2",
+        description = "apigatewayservicer",
+        subjectName = "apigatewayservicev2",
         messageClass = BaseMessage.class)
 @Component
-public class NatsRpcServiceHandler extends RestApiAbstractServiceHandler<BaseMessage> {
+public class NatsUnionServiceHandler extends UnionRestApiAbstractServiceHandler<BaseMessage> {
 
     private Connection connection;
     private ObjectMapper objectMapper;
 
-    public NatsRpcServiceHandler(ObjectMapper objectMapper, Connection connection) {
+    public NatsUnionServiceHandler(ObjectMapper objectMapper, Connection connection) {
         this.objectMapper = objectMapper;
         this.connection = connection;
     }
@@ -50,9 +56,26 @@ public class NatsRpcServiceHandler extends RestApiAbstractServiceHandler<BaseMes
     }
 
     @ResponseBody
-    @ServiceMapping(
+    @UnionMapping(
+            name = "defaultMsgApiHandler",
+            path = {"/api/gw/v2/msg/{servicename}/{prefix}/{serviceendpoint}"},
+            method = {"POST"},
+            version = "1.0.0"
+    )
+    @Override
+    public ResponseEntity<Object> defaultMsgApiHandler(@PathVariable(name = "servicename") String serviceName,
+                                                       @PathVariable(name = "prefix") String prefix,
+                                                       @PathVariable(name = "serviceendpoint") String serviceEndpoint,
+                                                       @RequestBody BaseMessage demoMessage,
+                                                       @Parameter(hidden = true) @RequestHeader HttpHeaders httpHeaders) {
+        var resul = super.defaultMsgApiHandler(serviceName, prefix, serviceEndpoint, demoMessage, httpHeaders);
+        return ResponseEntity.ok(resul);
+    }
+
+    @ResponseBody
+    @UnionMapping(
             name = "defaultRestApiHandler",
-            path = {"/api/gw/rest/{servicename}/{prefix}/{serviceendpoint}"},
+            path = {"/api/gw/v2/rest/{servicename}/{prefix}/{serviceendpoint}"},
             method = {"POST"},
             version = "1.0.0"
     )

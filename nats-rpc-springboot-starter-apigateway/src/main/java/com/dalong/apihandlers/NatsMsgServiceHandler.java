@@ -27,12 +27,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Component
 public class NatsMsgServiceHandler extends MsgApiAbstractMsgHandler<BaseMessage> {
 
-    private  Connection connection;
-    private  ObjectMapper objectMapper;
+    private Connection connection;
+    private ObjectMapper objectMapper;
+
     public NatsMsgServiceHandler(ObjectMapper objectMapper, Connection connection) {
         this.objectMapper = objectMapper;
         this.connection = connection;
     }
+
     @Override
     public Connection getConnection() {
         return this.connection;
@@ -57,11 +59,11 @@ public class NatsMsgServiceHandler extends MsgApiAbstractMsgHandler<BaseMessage>
     )
     @Override
     public ResponseEntity<Object> defaultMsgApiHandler(@PathVariable(name = "servicename") String serviceName,
-                                               @PathVariable(name = "prefix") String prefix,
-                                               @PathVariable(name = "serviceendpoint") String serviceEndpoint,
-                                               @RequestBody   BaseMessage demoMessage,
-                                               @Parameter(hidden = true) @RequestHeader  HttpHeaders httpHeaders) {
-        var resul =  super.defaultMsgApiHandler(serviceName,prefix,serviceEndpoint, demoMessage, httpHeaders);
+                                                       @PathVariable(name = "prefix") String prefix,
+                                                       @PathVariable(name = "serviceendpoint") String serviceEndpoint,
+                                                       @RequestBody BaseMessage demoMessage,
+                                                       @Parameter(hidden = true) @RequestHeader HttpHeaders httpHeaders) {
+        var resul = super.defaultMsgApiHandler(serviceName, prefix, serviceEndpoint, demoMessage, httpHeaders);
         return ResponseEntity.ok(resul);
     }
 }

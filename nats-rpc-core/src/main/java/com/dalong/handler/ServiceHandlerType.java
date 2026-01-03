@@ -12,9 +12,14 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ServiceHandlerType {
     String typeValue();
+
     String version() default "1.0.0";
+
     String scope() default "global";
+
     String description() default "";
+
     String endpointName() default "";
+
     Class<? extends BaseMessage> messageClass();
 }

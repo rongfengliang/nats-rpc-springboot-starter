@@ -27,6 +27,7 @@ public class NatsRpcClientsRegistrar implements ImportBeanDefinitionRegistrar {
             }
         };
     }
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         Map<String, Object> attributes = importingClassMetadata
@@ -38,8 +39,8 @@ public class NatsRpcClientsRegistrar implements ImportBeanDefinitionRegistrar {
                     importingClassMetadata.getClassName().lastIndexOf("."))};
         }
 
-        ClassPathScanningCandidateComponentProvider  scanner = getScanner();
-        scanner.addIncludeFilter(new AnnotationTypeFilter(RpcClient.class,true));
+        ClassPathScanningCandidateComponentProvider scanner = getScanner();
+        scanner.addIncludeFilter(new AnnotationTypeFilter(RpcClient.class, true));
 
         for (String basePackage : basePackages) {
             scanner.findCandidateComponents(basePackage).forEach(beanDef -> {

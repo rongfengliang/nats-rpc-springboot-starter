@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RpcClient {
     String serviceName();
+
     String serviceEndpoint();
+
     String servicePrefix() default "global";
 }
