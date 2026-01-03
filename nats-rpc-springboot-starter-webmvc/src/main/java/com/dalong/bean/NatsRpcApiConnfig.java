@@ -10,7 +10,7 @@ import java.util.List;
 
 @Configuration
 @ConditionalOnBean(RequestMappingHandlerMapping.class)
-public class NatsRpcRestApiConnfig {
+public class NatsRpcApiConnfig {
     @Bean(initMethod = "registerRestApis")
     public NatsRpcRestApiRegistor natsRpcRestApiRegistrar(RequestMappingHandlerMapping requestMappingHandlerMapping, List<ServiceHandler> serviceHandlers) {
         return new NatsRpcRestApiRegistor(requestMappingHandlerMapping, serviceHandlers);

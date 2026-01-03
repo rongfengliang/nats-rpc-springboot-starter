@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.dalong.bean.NatsRpcRestApiConnfig
+com.dalong.bean.NatsRpcApiConnfig
