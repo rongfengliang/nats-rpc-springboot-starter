@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.dalong</groupId>
         <artifactId>nats-rpc-framework</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>nats-rpc-core</artifactId>
