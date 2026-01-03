@@ -13,8 +13,9 @@ nats micro service rpc framework is a lightweight and high-performance microserv
 - Spring boot integration: Seamlessly integrates with Spring Boot applications
 - Fegin style rpc call support: Supports Fegin style rpc calls for easy integration with existing services
 - Rest api export support: Easily expose your microservices as RESTful APIs
-- rest api gateway support: Provides a gateway for RESTful APIs to interact with microservices(rpc+msg)
-
+- Rest api gateway support: Provides a gateway for RESTful APIs to interact with microservices(rpc+msg)
+- Springdoc support: Automatically generates API documentation for your microservices
+- UnionHandler: one handler support rpc and msg two styles
 
 ## usage
 
@@ -298,4 +299,47 @@ public class DemoNatsServiceHandlerV2 extends MsgApiAbstractMsgHandler<DemoMessa
    <artifactId>nats-rpc-springboot-starter-webmvc-springdoc</artifactId>
    <version>1.0-SNAPSHOT</version>
 </dependency>
+```
+
+### 10. UnionHandler support
+
+```java
+@UnionHandlerType(
+        typeValue = "tenantauthmessage",
+        version = "1.0.0",
+        scope = "global",
+        subjectName = "tenantauthservicev4",
+        description = "tenant auth message handler",
+        endpointName = "tenantauthservicev4",
+        messageClass = DemoMessage.class)
+@Component
+public class OneHandler extends UnionHandler<DemoMessage> {
+
+    private Connection connection;
+    private ObjectMapper objectMapper;
+
+    public OneHandler(ObjectMapper objectMapper, Connection connection) {
+        this.objectMapper = objectMapper;
+        this.connection = connection;
+    }
+
+    @Override
+    public Connection getConnection() {
+        return this.connection;
+    }
+
+    @Override
+    public ObjectMapper getObjectMapper() {
+        return this.objectMapper;
+    }
+    // can deal with rpc style and msg style
+    public DemoMessage echoDemo(DemoMessage demoMessage, Headers headers) {
+        return demoMessage;
+    }
+    // default handler, can deal with rpc style and msg style
+    @Override
+    public Object defaultMessageHandler(DemoMessage baseMessage, Headers headers) {
+        return baseMessage;
+    }
+}
 ```
