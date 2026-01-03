@@ -13,6 +13,7 @@ nats micro service rpc framework is a lightweight and high-performance microserv
 - Spring boot integration: Seamlessly integrates with Spring Boot applications
 - Fegin style rpc call support: Supports Fegin style rpc calls for easy integration with existing services
 - Rest api export support: Easily expose your microservices as RESTful APIs
+- rest api gateway support: Provides a gateway for RESTful APIs to interact with microservices(rpc+msg)
 
 
 ## usage
