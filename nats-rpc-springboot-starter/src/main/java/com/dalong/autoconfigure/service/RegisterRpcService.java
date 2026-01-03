@@ -29,7 +29,7 @@ public class RegisterRpcService {
             String serviceEndpointSubject = String.format(serviceEndpointSubjectFormatt, serviceName, servicePrefix, serviceHandler.serviceEndpointName());
             Endpoint endpoint = new Endpoint.Builder()
                     .subject(serviceEndpointSubject)
-                    .name("zaojian-rpc-service-endpoint-" + serviceHandler.serviceEndpointName())
+                    .name("nats-rpc-service-endpoint-" + serviceHandler.serviceEndpointName())
                     .build();
             ServiceEndpoint serviceEndpoint = ServiceEndpoint.builder()
                     .endpoint(endpoint)
