@@ -1,6 +1,7 @@
 package com.dalong.bean;
 
 import com.dalong.handler.ServiceHandler;
+import com.dalong.handler.SubMessageHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,11 @@ public class NatsRpcApiConnfig {
     @Bean(initMethod = "registerRestApis")
     public NatsRpcRestApiRegistor natsRpcRestApiRegistrar(RequestMappingHandlerMapping requestMappingHandlerMapping, List<ServiceHandler> serviceHandlers) {
         return new NatsRpcRestApiRegistor(requestMappingHandlerMapping, serviceHandlers);
+    }
+
+    @Bean(initMethod = "registerMsgApis")
+    public NatsMsgRestApiRegistor natsMsgRestApiRegistor(RequestMappingHandlerMapping requestMappingHandlerMapping, List<SubMessageHandler> subMessageHandlers) {
+        return new NatsMsgRestApiRegistor(requestMappingHandlerMapping, subMessageHandlers);
     }
 
     @Bean

@@ -259,13 +259,37 @@ public class DemoNatsServiceHandler extends RestApiAbstractServiceHandler<DemoMe
                                         @PathVariable(name = "prefix") String prefix,
                                         @PathVariable(name = "serviceendpoint") String serviceEndpoint,
                                         @RequestBody   DemoMessage demoMessage,
-                                        @Parameter(hidden = true) HttpHeaders httpHeaders) {
+                                        @Parameter(hidden = true) @RequestHeader  HttpHeaders httpHeaders) {
         return super.defaultRestApiHandler(serviceName,prefix,serviceEndpoint, demoMessage, httpHeaders);
     }
 ```
 
 
-### 8. rest api springdoc support
+### 8.  msg rest api spring mvc support
+
+extend MsgApiAbstractMsgHandler
+
+```java
+public class DemoNatsServiceHandlerV2 extends MsgApiAbstractMsgHandler<DemoMessage> {
+
+    @ResponseBody
+    @MsgMapping(
+            name = "defaultRestApiHandler",
+            path = {"/api/default/rest/{servicename}/{prefix}/{serviceendpoint}"},
+            method = {"POST"},
+            version = "1.0.0"
+    )
+    @Override
+    public Object defaultMsgApiHandler(@PathVariable(name = "servicename") String serviceName,
+                                        @PathVariable(name = "prefix") String prefix,
+                                        @PathVariable(name = "serviceendpoint") String serviceEndpoint,
+                                        @RequestBody   DemoMessage demoMessage,
+                                        @Parameter(hidden = true) @RequestHeader  HttpHeaders httpHeaders) {
+        return super.defaultMsgApiHandler(serviceName,prefix,serviceEndpoint, demoMessage, httpHeaders);
+    }
+```
+
+### 9. rest api springdoc support
 
 ```java
 <dependency>

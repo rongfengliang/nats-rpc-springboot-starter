@@ -44,4 +44,12 @@ public class NatsRpcCall {
         }
         return null;
     }
+
+    public static void sendMsg(Connection connection, String subject, byte[] requestPayload, Headers headers) {
+        try {
+             connection.publish(subject,headers,requestPayload);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

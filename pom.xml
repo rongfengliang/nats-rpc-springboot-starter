@@ -13,6 +13,7 @@
         <module>nats-rpc-springboot-starter</module>
         <module>nats-rpc-springboot-starter-webmvc</module>
         <module>nats-rpc-springboot-starter-webmvc-springdoc</module>
+        <module>nats-rpc-springboot-starter-apigateway</module>
     </modules>
 
     <properties>

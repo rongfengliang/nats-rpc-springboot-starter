@@ -24,6 +24,9 @@ public class NatsRpcRestApiSpringdocRegistor {
         serviceHandlers.forEach(serviceHandler -> {
             Method[] methods = serviceHandler.getClass().getDeclaredMethods();
             Arrays.stream(methods).forEach(method -> {
+                if(method.isBridge()){
+                    return;
+                }
                 ServiceMapping serviceMapping = method.getAnnotation(ServiceMapping.class);
                 if (serviceMapping == null) {
                     return;
