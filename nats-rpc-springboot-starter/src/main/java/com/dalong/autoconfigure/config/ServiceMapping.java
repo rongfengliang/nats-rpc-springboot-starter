@@ -9,7 +9,10 @@ import java.lang.annotation.*;
 @Documented
 public @interface ServiceMapping {
     String name() default "";
+
     String[] path() default {};
+
     String[] method() default {};
+
     String version() default "";
 }

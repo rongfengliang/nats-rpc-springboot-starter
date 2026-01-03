@@ -16,20 +16,20 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class ServiceHandlerRegistry {
-    
+
     /**
      * 消息类型 -> 处理器的映射
      */
     private final Map<Class<? extends BaseMessage>, ServiceHandler<? extends BaseMessage>> handlers = new ConcurrentHashMap<>();
-    
+
     /**
      * 消息类型名称 -> 消息类型的映射（用于反序列化时查找）
      */
     private final Map<String, Class<? extends BaseMessage>> messageTypes = new ConcurrentHashMap<>();
-    
+
     /**
      * 注册消息处理器
-     * 
+     *
      * @param handler 消息处理器
      */
     public <T extends BaseMessage> void registerWithSubTypes(ServiceHandler<T> handler, ObjectMapper objectMapper) {
@@ -43,6 +43,7 @@ public class ServiceHandlerRegistry {
 
     /**
      * 注册消息处理器, 不注册子类型, 需要显示指定类型序列化
+     *
      * @param handler
      * @param <T>
      */
@@ -58,13 +59,13 @@ public class ServiceHandlerRegistry {
         return handlers;
     }
 
-    public  Map<String, Class<? extends BaseMessage>> getMessageTypes() {
+    public Map<String, Class<? extends BaseMessage>> getMessageTypes() {
         return messageTypes;
     }
-    
+
     /**
      * 获取消息处理器
-     * 
+     *
      * @param messageType 消息类型
      * @return 消息处理器，如果未找到返回 null
      */
@@ -83,7 +84,7 @@ public class ServiceHandlerRegistry {
 
     /**
      * 根据消息类型名称获取消息类型
-     * 
+     *
      * @param typeName 消息类型名称
      * @return 消息类型，如果未找到返回 null
      */
@@ -91,10 +92,10 @@ public class ServiceHandlerRegistry {
     public <T extends BaseMessage> Class<T> getMessageType(String typeName) {
         return (Class<T>) messageTypes.get(typeName);
     }
-    
+
     /**
      * 检查是否有对应的处理器
-     * 
+     *
      * @param messageType 消息类型
      * @return 是否存在处理器
      */

@@ -7,7 +7,10 @@ import java.lang.annotation.*;
 @Documented
 public @interface MsgMapping {
     String name() default "";
+
     String[] path() default {};
+
     String[] method() default {};
+
     String version() default "";
 }

@@ -3,8 +3,8 @@ package com.dalong.util;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 public class methodutils {
-    public static RequestMethod str2RequestMethod(String method){
-        switch (method.toUpperCase()){
+    public static RequestMethod str2RequestMethod(String method) {
+        switch (method.toUpperCase()) {
             case "GET":
                 return RequestMethod.GET;
             case "POST":

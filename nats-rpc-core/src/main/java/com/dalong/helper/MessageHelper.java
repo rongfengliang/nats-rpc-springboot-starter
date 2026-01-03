@@ -11,19 +11,19 @@ import java.lang.reflect.Method;
 
 @Slf4j
 public class MessageHelper {
-    public static <T extends BaseMessage>  T castBaseMessage(String payload, Class<T> clazz, ObjectMapper objectMapper) {
+    public static <T extends BaseMessage> T castBaseMessage(String payload, Class<T> clazz, ObjectMapper objectMapper) {
         try {
-          return   objectMapper.readValue(payload, clazz);
+            return objectMapper.readValue(payload, clazz);
         } catch (IOException e) {
             log.error("Failed to cast message: {}", e.getMessage());
         }
         return null;
     }
 
-    public  static  <T extends  BaseMessage,H> Object  actionMethodExecute(Method method,H h, T baseMessage, Headers headers) {
+    public static <T extends BaseMessage, H> Object actionMethodExecute(Method method, H h, T baseMessage, Headers headers) {
         Object result;
         try {
-            result = method.invoke(h,baseMessage, headers);
+            result = method.invoke(h, baseMessage, headers);
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
@@ -31,9 +31,10 @@ public class MessageHelper {
         }
         return result;
     }
-    public static <T extends  BaseMessage> T castBaseMessage(byte[] payload,Class<T> clazz, ObjectMapper objectMapper) {
+
+    public static <T extends BaseMessage> T castBaseMessage(byte[] payload, Class<T> clazz, ObjectMapper objectMapper) {
         try {
-            return   objectMapper.readValue(payload, clazz);
+            return objectMapper.readValue(payload, clazz);
         } catch (IOException e) {
             log.error("Failed to cast message: {}", e.getMessage());
         }

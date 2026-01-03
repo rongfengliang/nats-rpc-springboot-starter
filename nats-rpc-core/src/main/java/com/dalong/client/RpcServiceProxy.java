@@ -14,6 +14,7 @@ public class RpcServiceProxy {
                 new NatsInvocationHandler(nats, objectMapper, timeout)
         );
     }
+
     public static <T> T createMsg(Class<T> serviceInterface, Connection nats, ObjectMapper objectMapper) {
         return (T) Proxy.newProxyInstance(
                 serviceInterface.getClassLoader(),

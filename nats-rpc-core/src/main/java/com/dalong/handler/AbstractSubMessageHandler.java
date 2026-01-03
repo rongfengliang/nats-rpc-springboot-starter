@@ -12,23 +12,27 @@ import java.lang.reflect.Method;
 import static com.dalong.helper.MessageHelper.actionMethodExecute;
 
 
-public  abstract  class AbstractSubMessageHandler<T extends BaseMessage> implements SubMessageHandler<T>{
+public abstract class AbstractSubMessageHandler<T extends BaseMessage> implements SubMessageHandler<T> {
     public T messageConvert(byte[] data) {
-        T baseMessage =  MessageHelper.castBaseMessage(data,this.getMessageType(),this.getObjectMapper());
-        return  baseMessage;
+        T baseMessage = MessageHelper.castBaseMessage(data, this.getMessageType(), this.getObjectMapper());
+        return baseMessage;
     }
-    public  abstract Connection getConnection();
-    public  abstract ObjectMapper getObjectMapper();
+
+    public abstract Connection getConnection();
+
+    public abstract ObjectMapper getObjectMapper();
+
     @Override
-    public  abstract Object defaultMessageHandler(T message, Headers headers);
+    public abstract Object defaultMessageHandler(T message, Headers headers);
+
     @Override
     public void onMessage(Message msg) throws InterruptedException {
-        T baseMessage =  messageConvert(msg.getData());
+        T baseMessage = messageConvert(msg.getData());
         Method actionMethod = actionMethod(baseMessage);
         Headers headers = msg.getHeaders();
-        if(beforeHandle(actionMethod,baseMessage,headers)) {
-            Object result =  actionMethodExecute(actionMethod,this,baseMessage,headers);
-            afterHandle(actionMethod,result,headers);
+        if (beforeHandle(actionMethod, baseMessage, headers)) {
+            Object result = actionMethodExecute(actionMethod, this, baseMessage, headers);
+            afterHandle(actionMethod, result, headers);
         }
     }
 }

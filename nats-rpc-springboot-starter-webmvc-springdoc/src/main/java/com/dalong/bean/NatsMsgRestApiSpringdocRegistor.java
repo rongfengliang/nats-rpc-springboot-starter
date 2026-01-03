@@ -21,7 +21,7 @@ public class NatsMsgRestApiSpringdocRegistor {
         subMessageHandlers.forEach(subMessageHandler -> {
             Method[] methods = subMessageHandler.getClass().getDeclaredMethods();
             Arrays.stream(methods).forEach(method -> {
-                if(method.isBridge()){
+                if (method.isBridge()) {
                     return;
                 }
                 MsgMapping msgMapping = method.getAnnotation(MsgMapping.class);

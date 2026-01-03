@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MsgClient {
     String msgSubject();
+
     String serviceName();
-    String servicePrefix() default  "global";
+
+    String servicePrefix() default "global";
 }

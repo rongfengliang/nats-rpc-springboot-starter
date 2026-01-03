@@ -10,12 +10,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 业务处理器接口,用于处理特定类型的消息
+ *
  * @param <T>
  */
-public interface BizServiceHandler<T extends BaseMessage>  {
+public interface BizServiceHandler<T extends BaseMessage> {
     Map<String, Method> methodCache = new ConcurrentHashMap<>();
-    Object defaultMessageHandler(T message,Headers headers);
+
+    Object defaultMessageHandler(T message, Headers headers);
+
     Class<T> getMessageType();
+
     default Method actionMethod(T message) {
         Method method = null;
         String key = getClass().getName() + "#" + message.getAction();
@@ -23,12 +27,12 @@ public interface BizServiceHandler<T extends BaseMessage>  {
             return methodCache.get(key);
         } else {
             try {
-                Class<T> cls = (Class<T>)getClass();
+                Class<T> cls = (Class<T>) getClass();
                 method = cls.getMethod(message.getAction(), getMessageType(), Headers.class);
                 method.setAccessible(true);
                 Type returnType = method.getGenericReturnType();
                 if (returnType == Void.TYPE) {
-                    throw  new NoSuchMethodException("Method returns void, fallback to defaultMessageHandle");
+                    throw new NoSuchMethodException("Method returns void, fallback to defaultMessageHandle");
                 }
                 methodCache.put(key, method);
                 return method;

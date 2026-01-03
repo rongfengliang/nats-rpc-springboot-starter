@@ -14,10 +14,12 @@ public class NatsMsgInvocationHandler implements InvocationHandler {
     private final Connection nats;
     private final ObjectMapper objectMapper;
     private Duration defaultTimeout = Duration.ofSeconds(120);
+
     public NatsMsgInvocationHandler(Connection nats, ObjectMapper objectMapper) {
         this.nats = nats;
         this.objectMapper = objectMapper;
     }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass() == Object.class) {
@@ -29,11 +31,11 @@ public class NatsMsgInvocationHandler implements InvocationHandler {
         String subject = "";
         byte[] req = null;
         Headers headers = null;
-        if(args.length==3 && (args[0] instanceof String)){
+        if (args.length == 3 && (args[0] instanceof String)) {
             subject = String.format(
                     serviceMsgSubjectFormat,
                     msgClient.serviceName(),
-                    (String)args[0],
+                    (String) args[0],
                     msgClient.msgSubject()
             );
             BaseMessage msg = (BaseMessage) args[1];
@@ -43,11 +45,11 @@ public class NatsMsgInvocationHandler implements InvocationHandler {
             req = objectMapper.writeValueAsBytes(msg);
             headers = (Headers) args[2];
         }
-        if (args.length==2 && (args[0] instanceof String)){
+        if (args.length == 2 && (args[0] instanceof String)) {
             subject = String.format(
                     serviceMsgSubjectFormat,
                     msgClient.serviceName(),
-                    (String)args[0],
+                    (String) args[0],
                     msgClient.msgSubject()
             );
             BaseMessage msg = (BaseMessage) args[1];
@@ -57,7 +59,7 @@ public class NatsMsgInvocationHandler implements InvocationHandler {
             req = objectMapper.writeValueAsBytes(msg);
         }
 
-        if (args.length==2 && (args[0] instanceof String)==false){
+        if (args.length == 2 && (args[0] instanceof String) == false) {
             subject = String.format(
                     serviceMsgSubjectFormat,
                     msgClient.serviceName(),
@@ -71,7 +73,7 @@ public class NatsMsgInvocationHandler implements InvocationHandler {
             req = objectMapper.writeValueAsBytes(msg);
             headers = (Headers) args[1];
         }
-        if(args.length==1) {
+        if (args.length == 1) {
             subject = String.format(
                     serviceMsgSubjectFormat,
                     msgClient.serviceName(),
@@ -88,16 +90,16 @@ public class NatsMsgInvocationHandler implements InvocationHandler {
 
         Type returnType = method.getGenericReturnType();
         if (returnType == Void.TYPE) {
-            if(headers != null){
+            if (headers != null) {
                 nats.publish(subject, headers, req);
-            }else{
+            } else {
                 nats.publish(subject, req);
             }
             return null;
         }
-        if(returnType != Void.TYPE) {
-            throw  new RuntimeException("MsgClient methods must have void return type");
+        if (returnType != Void.TYPE) {
+            throw new RuntimeException("MsgClient methods must have void return type");
         }
-        return  null;
+        return null;
     }
 }
