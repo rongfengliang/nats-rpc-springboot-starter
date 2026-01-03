@@ -70,6 +70,7 @@ public abstract class UnionHandler<T extends BaseMessage> implements ServiceMess
         T baseMessage = messageConvert(smsg.getData());
         Headers headers = smsg.getHeaders();
         Method actionMethod = actionMethod(baseMessage);
+
         boolean continueProcess = beforeHandle(actionMethod, baseMessage, headers);
         if (continueProcess) {
             Object result = actionMethodExecute(actionMethod, this, baseMessage, headers);
