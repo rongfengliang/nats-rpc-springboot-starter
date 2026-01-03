@@ -15,4 +15,9 @@ public class NatsRpcRestApiConnfig {
     public NatsRpcRestApiRegistor natsRpcRestApiRegistrar(RequestMappingHandlerMapping requestMappingHandlerMapping, List<ServiceHandler> serviceHandlers) {
         return new NatsRpcRestApiRegistor(requestMappingHandlerMapping, serviceHandlers);
     }
+
+    @Bean
+    public GlobalBinderConfig globalBinderConfig() {
+        return new GlobalBinderConfig();
+    }
 }

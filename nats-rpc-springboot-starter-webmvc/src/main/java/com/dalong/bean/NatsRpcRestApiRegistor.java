@@ -11,7 +11,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class NatsRpcRestApiRegistor {
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
@@ -26,7 +25,7 @@ public class NatsRpcRestApiRegistor {
         serviceHandlers.forEach(serviceHandler -> {
             Class<?> targetClass =
                     AopProxyUtils.ultimateTargetClass(serviceHandler);
-            Method[] methods = targetClass.getDeclaredMethods();
+            Method[] methods = targetClass.getMethods();
             Arrays.stream(methods).forEach(method -> {
                 if(method.isBridge()){
                     return;

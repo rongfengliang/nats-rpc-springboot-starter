@@ -247,31 +247,21 @@ extend RestApiAbstractServiceHandler
 ```java
 public class DemoNatsServiceHandler extends RestApiAbstractServiceHandler<DemoMessage> {
 
-@ResponseBody
-@ServiceMapping(
-        name = "defaultRestApiHandler",
-        path = {"/api/default/rest/"},
-        method = {"POST"},
-        version = "1.0.0"
-)
-public Object defaultRestApiHandler(@RequestBody DemoMessage demoMessage, @Parameter(hidden = true) @RequestHeader(required = false) HttpHeaders httpHeaders){
-    return restApiHandler(demoMessage, httpHeaders);
- }
-}
-
-or
-
-@ResponseBody
-@ServiceMapping(
-        name = "defaultRestApiHandler",
-        path = {"/api/default/rest/"},
-        method = {"POST"},
-        version = "1.0.0"
-)
-@Override
-public Object defaultRestApiHandler(@RequestBody  DemoMessage demoMessage, @Parameter(hidden = true) HttpHeaders httpHeaders) {
-    return super.defaultRestApiHandler(demoMessage, httpHeaders);
-}
+    @ResponseBody
+    @ServiceMapping(
+            name = "defaultRestApiHandler",
+            path = {"/api/default/rest/{servicename}/{prefix}/{serviceendpoint}"},
+            method = {"POST"},
+            version = "1.0.0"
+    )
+    @Override
+    public Object defaultRestApiHandler(@PathVariable(name = "servicename") String serviceName,
+                                        @PathVariable(name = "prefix") String prefix,
+                                        @PathVariable(name = "serviceendpoint") String serviceEndpoint,
+                                        @RequestBody   DemoMessage demoMessage,
+                                        @Parameter(hidden = true) HttpHeaders httpHeaders) {
+        return super.defaultRestApiHandler(serviceName,prefix,serviceEndpoint, demoMessage, httpHeaders);
+    }
 ```
 
 
