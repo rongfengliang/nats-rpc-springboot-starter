@@ -9,7 +9,7 @@ import static com.dalong.util.NatsRpcCall.serializeMessage;
 
 public abstract class UnionRestApiAbstractServiceHandler<T extends BaseMessage> extends UnionHandler<T> {
 
-    public <R> R defaultRestApiHandler(String serviceName, String prefix, String serviceEndpoint, T demoMessage, HttpHeaders httpHeaders) {
+    public Object defaultRestApiHandler(String serviceName, String prefix, String serviceEndpoint, T demoMessage, HttpHeaders httpHeaders) {
         return restApiHandler(serviceName, prefix, serviceEndpoint, demoMessage, httpHeaders);
     }
 
@@ -32,7 +32,7 @@ public abstract class UnionRestApiAbstractServiceHandler<T extends BaseMessage> 
 
     }
 
-    public <R> R restApiHandler(String serviceName, String prefix, String serviceEndpoint, T baseMessage, HttpHeaders headers) {
+    public Object  restApiHandler(String serviceName, String prefix, String serviceEndpoint, T baseMessage, HttpHeaders headers) {
         Headers natsHeaders;
         if (headers != null) {
             natsHeaders = new Headers();
@@ -49,7 +49,7 @@ public abstract class UnionRestApiAbstractServiceHandler<T extends BaseMessage> 
             byte[] payload = serializeMessage(this.getObjectMapper(), baseMessage);
             Object result = NatsRpcCall.call(this.getConnection(), this.getObjectMapper(), fullServiceEndpoint, payload, natsHeaders);
             afterRestApiHandler(serviceName, prefix, serviceEndpoint, baseMessage, headers, result);
-            return (R) result;
+            return result;
         }
         return null;
     }
