@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.github.rongfengliang</groupId>
             <artifactId>nats-rpc-springboot-starter</artifactId>
-            <version>${project.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

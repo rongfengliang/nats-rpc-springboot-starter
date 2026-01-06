@@ -26,7 +26,7 @@
         <dependency>
             <groupId>com.github.rongfengliang</groupId>
             <artifactId>nats-rpc-core</artifactId>
-            <version>${project.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

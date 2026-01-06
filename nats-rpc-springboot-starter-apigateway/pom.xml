@@ -21,13 +21,13 @@
         <dependency>
             <groupId>com.github.rongfengliang</groupId>
             <artifactId>nats-rpc-springboot-starter-webmvc</artifactId>
-            <version>${project.version}</version>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.rongfengliang</groupId>
             <artifactId>nats-rpc-springboot-starter-webmvc-springdoc</artifactId>
-            <version>${project.version}</version>
+            <version>${revision}</version>
         </dependency>
 
     </dependencies>
