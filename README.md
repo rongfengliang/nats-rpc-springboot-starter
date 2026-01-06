@@ -23,10 +23,18 @@ nats micro service rpc framework is a lightweight and high-performance microserv
 
 pom.xml 
 ```xml
+
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
 <dependency>
-    <groupId>com.dalong</groupId>
+    <groupId>com.github.rongfengliang</groupId>
     <artifactId>nats-rpc-springboot-starter</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -223,9 +231,9 @@ public class RpcDemoApplication {
 
 ```xml
 <dependency>
-    <groupId>com.dalong</groupId>
+    <groupId>com.github.rongfengliang</groupId>
     <artifactId>nats-rpc-springboot-starter-webmvc</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -295,9 +303,9 @@ public class DemoNatsServiceHandlerV2 extends MsgApiAbstractMsgHandler<DemoMessa
 
 ```java
 <dependency>
-   <groupId>com.dalong</groupId>
+   <groupId>com.github.rongfengliang</groupId>
    <artifactId>nats-rpc-springboot-starter-webmvc-springdoc</artifactId>
-   <version>1.0-SNAPSHOT</version>
+   <version>1.0.1</version>
 </dependency>
 ```
 
