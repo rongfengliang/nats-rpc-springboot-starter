@@ -231,9 +231,9 @@ public class RpcDemoApplication {
 
 ```xml
 <dependency>
-    <groupId>com.github.rongfengliang</groupId>
+    <groupId>com.github.rongfengliang.nats-rpc-springboot-starter</groupId>
     <artifactId>nats-rpc-springboot-starter-webmvc</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
@@ -303,9 +303,9 @@ public class DemoNatsServiceHandlerV2 extends MsgApiAbstractMsgHandler<DemoMessa
 
 ```java
 <dependency>
-   <groupId>com.github.rongfengliang</groupId>
+   <groupId>com.github.rongfengliang.nats-rpc-springboot-starter</groupId>
    <artifactId>nats-rpc-springboot-starter-webmvc-springdoc</artifactId>
-   <version>1.0.1</version>
+   <version>1.0.2</version>
 </dependency>
 ```
 
