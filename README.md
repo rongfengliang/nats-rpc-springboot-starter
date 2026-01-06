@@ -32,9 +32,9 @@ pom.xml
 </repositories>
 
 <dependency>
-    <groupId>com.github.rongfengliang</groupId>
+    <groupId>com.github.rongfengliang.nats-rpc-springboot-starter</groupId>
     <artifactId>nats-rpc-springboot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
