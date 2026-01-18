@@ -16,6 +16,7 @@ nats micro service rpc framework is a lightweight and high-performance microserv
 - Rest api gateway support: Provides a gateway for RESTful APIs to interact with microservices(rpc+msg)
 - Springdoc support: Automatically generates API documentation for your microservices
 - UnionHandler: one handler support rpc and msg two styles
+- Export rest api with spring mvc or spring webflux   
 
 ## usage
 
