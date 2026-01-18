@@ -1,0 +1,40 @@
+package com.dalong.bean;
+
+import com.dalong.bean.GlobalBinderConfig;
+import com.dalong.bean.NatsMsgRestApiRegistor;
+import com.dalong.bean.NatsRpcRestApiRegistor;
+import com.dalong.bean.NatsUnionRestApiRegistor;
+import com.dalong.handler.ServiceHandler;
+import com.dalong.handler.SubMessageHandler;
+import com.dalong.handler.UnionHandler;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerMapping;
+
+import java.util.List;
+
+@Configuration
+@ConditionalOnBean(RequestMappingHandlerMapping.class)
+public class NatsRpcApiConnfig {
+
+    @Bean(initMethod = "registerRestApis")
+    public NatsRpcRestApiRegistor natsRpcRestApiRegistrar(RequestMappingHandlerMapping requestMappingHandlerMapping, List<ServiceHandler> serviceHandlers) {
+        return new NatsRpcRestApiRegistor(requestMappingHandlerMapping, serviceHandlers);
+    }
+
+    @Bean(initMethod = "registerMsgApis")
+    public NatsMsgRestApiRegistor natsMsgRestApiRegistor(RequestMappingHandlerMapping requestMappingHandlerMapping, List<SubMessageHandler> subMessageHandlers) {
+        return new NatsMsgRestApiRegistor(requestMappingHandlerMapping, subMessageHandlers);
+    }
+
+    @Bean(initMethod = "registerRestApis")
+    public NatsUnionRestApiRegistor natsUnionRestApiRegistor(RequestMappingHandlerMapping requestMappingHandlerMapping, List<UnionHandler> unionHandlers) {
+        return new NatsUnionRestApiRegistor(requestMappingHandlerMapping, unionHandlers);
+    }
+
+    @Bean
+    public GlobalBinderConfig globalBinderConfig() {
+        return new GlobalBinderConfig();
+    }
+}
