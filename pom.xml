@@ -17,6 +17,7 @@
         <module>nats-rpc-springboot-starter-webflux</module>
         <module>nats-rpc-springboot-starter-webflux-springdoc</module>
         <module>nats-rpc-springboot-starter-apigateway-webflux</module>
+        <module>nats-rpc-core-reactor</module>
     </modules>
 
     <properties>
@@ -29,6 +30,7 @@
         <lombok.version>1.18.42</lombok.version>
         <slf4j.version>2.0.9</slf4j.version>
         <spring.boot.version>4.0.0</spring.boot.version>
+        <rector.version>3.8.2</rector.version>
         <common.lang3.version>3.20.0</common.lang3.version>
     </properties>
     <build>
