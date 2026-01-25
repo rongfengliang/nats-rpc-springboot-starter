@@ -114,9 +114,9 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
         CompletableFuture<Message> msg;
 
         if (headers != null) {
-            msg = nats.request(subject, headers, req);
+            msg = nats.requestWithTimeout(subject, headers, req,timeout);
         } else {
-            msg = nats.request(subject, req);
+            msg = nats.requestWithTimeout(subject, req,timeout);
         }
         Mono<Object> monoResult = Mono.fromFuture(msg)
                 // 放在弹性线程池上执行，以避免阻塞事件循环
