@@ -39,7 +39,7 @@ class NatsGateWayRetryInvocationHandlerTest {
                 .waitDuration(Duration.ZERO)
                 .build());
 
-        DemoGateway client = RpcServiceGateWayRetryProxy.create(
+        DemoGateway client = RpcServiceRetryProxy.create(
                 DemoGateway.class,
                 connection,
                 mapper,
