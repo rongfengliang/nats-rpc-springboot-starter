@@ -42,8 +42,9 @@ public class NatsRpcServiceAutoConfigure {
             if (rpcServiceConfig.getMsgHub() == null || rpcServiceConfig.getMsgHub().getUrl() == null) {
                 throw new RuntimeException("MsgHub configuration is missing");
             }
+            Options.Builder builder = new Options.Builder();
             if ((rpcServiceConfig.getMsgHub().getCreds() != null) && !rpcServiceConfig.getMsgHub().getCreds().isEmpty()) {
-                options = new Options.Builder()
+                options = builder
                         .useDispatcherWithExecutor()
                         .server(rpcServiceConfig.getMsgHub().getUrl())
                         .authHandler(Nats.credentials(rpcServiceConfig.getMsgHub().getCreds()))
@@ -53,10 +54,13 @@ public class NatsRpcServiceAutoConfigure {
                         .connectionTimeout(Duration.ofSeconds(5))
                         .build();
             } else {
-                options = new Options.Builder()
+                if (rpcServiceConfig.getMsgHub().getUsername() != null){
+                    builder.userInfo(rpcServiceConfig.getMsgHub().getUsername(), rpcServiceConfig.getMsgHub().getPassword());
+                }
+                options = builder
                         .useDispatcherWithExecutor()
                         .server(rpcServiceConfig.getMsgHub().getUrl())
-                        .userInfo(rpcServiceConfig.getMsgHub().getUsername(), rpcServiceConfig.getMsgHub().getPassword())
+
                         .connectionName(rpcServiceConfig.getRpcServiceName())
                         .reconnectWait(Duration.ofSeconds(2))
                         .maxReconnects(-1)

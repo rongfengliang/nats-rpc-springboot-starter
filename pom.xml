@@ -20,10 +20,14 @@
         <module>nats-rpc-core-reactor</module>
         <module>nats-rpc-core-reactor-resilience4j</module>
         <module>nats-rpc-resilience4j</module>
+        <module>samples</module>
+        <module>samples/rpc-server</module>
+        <module>samples/rpc-common</module>
+        <module>samples/rpc-client</module>
     </modules>
 
     <properties>
-        <revision>1.0.6</revision>
+        <revision>1.0.6+3.5-SNAPSHOT</revision>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,7 +36,7 @@
         <lombok.version>1.18.42</lombok.version>
         <slf4j.version>2.0.9</slf4j.version>
         <resilience4j.version>2.4.0</resilience4j.version>
-        <spring.boot.version>4.0.0</spring.boot.version>
+        <spring.boot.version>3.5.16</spring.boot.version>
         <rector.version>3.8.2</rector.version>
         <common.lang3.version>3.20.0</common.lang3.version>
     </properties>
@@ -52,5 +56,25 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>xcmg</id>
+            <properties>
+                <docker.registry>10.16.10.28:8086/irmp/</docker.registry>
+            </properties>
+            <distributionManagement>
+                <repository>
+                    <id>xgzl-irmp-rel</id>
+                    <name>xgzl-irmp-rel</name>
+                    <url>http://10.16.10.28:8081/repository/irmp-rel/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>xgzl-irmp-sns</id>
+                    <name>xgzl-irmp-sns</name>
+                    <url>http://10.16.10.28:8081/repository/irmp-sns/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 </project>

@@ -1,0 +1,8 @@
+rpcservice:
+  enabled: true
+  msghub:
+    url: nats://10.16.10.109:24222
+#    username: your_username
+#    password: your_password
+  rpc-service-name: "demo-service"
+  rpcservice-prefix: "v1"
