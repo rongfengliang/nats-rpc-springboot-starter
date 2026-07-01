@@ -81,7 +81,7 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
                     serviceName,
-                    refix,
+                    prefix,
                     endpoint
             );
             BaseMessage msg = (BaseMessage) args[0];

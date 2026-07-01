@@ -129,7 +129,7 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
             requestContext.subject = String.format(
                     SERVICE_ENDPOINT_SUBJECT_FORMAT,
                     serviceName,
-                    s,
+                    prefix,
                     endpoint
             );
             BaseMessage msg = (BaseMessage) args[0];
