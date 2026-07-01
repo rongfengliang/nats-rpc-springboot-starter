@@ -1,12 +1,14 @@
 package com.dalong.reactorclient;
 
 import com.dalong.client.RpcClient;
+import com.dalong.helper.SpringEnvironmentHolder;
 import com.dalong.models.BaseMessage;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.nats.client.Connection;
 import io.nats.client.Message;
 import io.nats.client.impl.Headers;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -18,6 +20,7 @@ import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 public class NatsInvocationReactorHandler implements InvocationHandler {
     private final Connection nats;
     private final ObjectMapper objectMapper;
@@ -42,12 +45,14 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
         String subject = "";
         byte[] req = null;
         Headers headers = null;
+        String serviceName = SpringEnvironmentHolder.resolvePlaceholders(service.serviceName());
+        String endpoint = SpringEnvironmentHolder.resolvePlaceholders(service.serviceEndpoint());
         if (args.length == 3 && (args[0] instanceof String)) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
-                    service.serviceName(),
+                    serviceName,
                     (String) args[0],
-                    service.serviceEndpoint()
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[1];
             // 每次直接覆盖action,使用方法名作为action,注意会覆盖掉之前的action值, 造成BaseMessage的action字段信息不太正确,此问题只存在于rpc调用场景
@@ -59,9 +64,9 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
         if (args.length == 2 && (args[0] instanceof String)) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
-                    service.serviceName(),
+                    serviceName,
                     (String) args[0],
-                    service.serviceEndpoint()
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[1];
             // 每次直接覆盖action,使用方法名作为action,注意会覆盖掉之前的action值, 造成BaseMessage的action字段信息不太正确,此问题只存在于rpc调用场景
@@ -70,12 +75,14 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
             req = objectMapper.writeValueAsBytes(msg);
         }
 
+        String prefix = SpringEnvironmentHolder.resolvePlaceholders(service.servicePrefix());
+
         if (args.length == 2 && (args[0] instanceof String) == false) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
-                    service.serviceName(),
-                    service.servicePrefix(),
-                    service.serviceEndpoint()
+                    serviceName,
+                    prefix,
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[0];
             // 每次直接覆盖action,使用方法名作为action,注意会覆盖掉之前的action值, 造成BaseMessage的action字段信息不太正确,此问题只存在于rpc调用场景
@@ -87,9 +94,9 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
         if (args.length == 1) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
-                    service.serviceName(),
-                    service.servicePrefix(),
-                    service.serviceEndpoint()
+                    serviceName,
+                    prefix,
+                    endpoint
 
             );
             BaseMessage msg = (BaseMessage) args[0];

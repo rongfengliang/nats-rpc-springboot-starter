@@ -2,6 +2,7 @@ package com.dalong.autoconfigure;
 
 import com.dalong.autoconfigure.service.RegisterUnionNatsService;
 import com.dalong.handler.UnionHandler;
+import com.dalong.helper.SpringEnvironmentHolder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.dalong.autoconfigure.config.RpcServiceConfig;
 import com.dalong.autoconfigure.service.RegisterBizService;
@@ -15,12 +16,14 @@ import com.dalong.registry.ServiceHandlerRegistry;
 import io.nats.client.Connection;
 import io.nats.client.Nats;
 import io.nats.client.Options;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import java.time.Duration;
 import java.util.List;
@@ -42,8 +45,9 @@ public class NatsRpcServiceAutoConfigure {
             if (rpcServiceConfig.getMsgHub() == null || rpcServiceConfig.getMsgHub().getUrl() == null) {
                 throw new RuntimeException("MsgHub configuration is missing");
             }
+            Options.Builder builder = new Options.Builder();
             if ((rpcServiceConfig.getMsgHub().getCreds() != null) && !rpcServiceConfig.getMsgHub().getCreds().isEmpty()) {
-                options = new Options.Builder()
+                options = builder
                         .useDispatcherWithExecutor()
                         .server(rpcServiceConfig.getMsgHub().getUrl())
                         .authHandler(Nats.credentials(rpcServiceConfig.getMsgHub().getCreds()))
@@ -53,10 +57,13 @@ public class NatsRpcServiceAutoConfigure {
                         .connectionTimeout(Duration.ofSeconds(5))
                         .build();
             } else {
-                options = new Options.Builder()
+                if (rpcServiceConfig.getMsgHub().getUsername() != null){
+                    builder.userInfo(rpcServiceConfig.getMsgHub().getUsername(), rpcServiceConfig.getMsgHub().getPassword());
+                }
+                options = builder
                         .useDispatcherWithExecutor()
                         .server(rpcServiceConfig.getMsgHub().getUrl())
-                        .userInfo(rpcServiceConfig.getMsgHub().getUsername(), rpcServiceConfig.getMsgHub().getPassword())
+
                         .connectionName(rpcServiceConfig.getRpcServiceName())
                         .reconnectWait(Duration.ofSeconds(2))
                         .maxReconnects(-1)
@@ -102,5 +109,13 @@ public class NatsRpcServiceAutoConfigure {
     @Bean
     public RegisterBizService registerBizService(List<BizServiceHandler> bizServiceHandlers, BizServiceHandlerRegistry bizServiceHandlerRegistry) {
         return new RegisterBizService(bizServiceHandlers, bizServiceHandlerRegistry);
+    }
+
+    @Autowired
+    private Environment environment;
+
+    @Bean
+    SpringEnvironmentHolder springEnvironmentHolder() {
+        return new SpringEnvironmentHolder(environment);
     }
 }

@@ -1,5 +1,6 @@
 package com.dalong.client;
 
+import com.dalong.helper.SpringEnvironmentHolder;
 import com.dalong.models.BaseMessage;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -67,9 +68,11 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
             }
 
             if (message == null) {
+                String serviceName = service.serviceName();
+
                 throw new RpcClientInvocationException(String.format(
                         "RPC retry call failed: service %s no response (subject: %s, timeout: %s seconds)",
-                        service.serviceName(), requestContext.subject, timeout.getSeconds()));
+                        serviceName, requestContext.subject, timeout.getSeconds()));
             }
             return objectMapper.readValue(message.getData(), javaType);
         });
@@ -78,12 +81,14 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
 
     private RequestContext resolveRequestContext(Method method, Object[] args, RpcClient service) throws Exception {
         RequestContext requestContext = new RequestContext();
+        String serviceName = SpringEnvironmentHolder.resolvePlaceholders(service.serviceName());
+        String endpoint = SpringEnvironmentHolder.resolvePlaceholders(service.serviceEndpoint());
         if (args.length == 3 && args[0] instanceof String) {
             requestContext.subject = String.format(
                     SERVICE_ENDPOINT_SUBJECT_FORMAT,
-                    service.serviceName(),
+                    serviceName,
                     args[0],
-                    service.serviceEndpoint()
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[1];
             msg.setAction(method.getName());
@@ -95,9 +100,9 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
         if (args.length == 2 && args[0] instanceof String) {
             requestContext.subject = String.format(
                     SERVICE_ENDPOINT_SUBJECT_FORMAT,
-                    service.serviceName(),
+                    serviceName,
                     args[0],
-                    service.serviceEndpoint()
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[1];
             msg.setAction(method.getName());
@@ -105,12 +110,13 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
             return requestContext;
         }
 
+        String prefix = SpringEnvironmentHolder.resolvePlaceholders(service.servicePrefix());
         if (args.length == 2 && !(args[0] instanceof String)) {
             requestContext.subject = String.format(
                     SERVICE_ENDPOINT_SUBJECT_FORMAT,
-                    service.serviceName(),
-                    service.servicePrefix(),
-                    service.serviceEndpoint()
+                    serviceName,
+                    prefix,
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[0];
             msg.setAction(method.getName());
@@ -122,9 +128,9 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
         if (args.length == 1) {
             requestContext.subject = String.format(
                     SERVICE_ENDPOINT_SUBJECT_FORMAT,
-                    service.serviceName(),
-                    service.servicePrefix(),
-                    service.serviceEndpoint()
+                    serviceName,
+                    prefix,
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[0];
             msg.setAction(method.getName());
