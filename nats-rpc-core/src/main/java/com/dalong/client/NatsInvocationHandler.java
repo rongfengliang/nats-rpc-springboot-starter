@@ -39,17 +39,14 @@ public class NatsInvocationHandler implements InvocationHandler {
         String subject = "";
         byte[] req = null;
         Headers headers = null;
-        String serviceName = service.serviceName();
-        if (serviceName.matches(".*\\$\\{.*\\}.*")) {
-            serviceName = SpringEnvironmentHolder.resolvePlaceholders(serviceName);
-            log.debug("RPC service name resolved to: {}", serviceName);
-        }
+        String serviceName = SpringEnvironmentHolder.resolvePlaceholders(service.serviceName());
+        String endpoint = SpringEnvironmentHolder.resolvePlaceholders(service.serviceEndpoint());
         if (args.length == 3 && (args[0] instanceof String)) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
                     serviceName,
                     (String) args[0],
-                    service.serviceEndpoint()
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[1];
             // 每次直接覆盖action,使用方法名作为action,注意会覆盖掉之前的action值, 造成BaseMessage的action字段信息不太正确,此问题只存在于rpc调用场景
@@ -63,7 +60,7 @@ public class NatsInvocationHandler implements InvocationHandler {
                     serviceEndpointSubjectFormatt,
                     serviceName,
                     (String) args[0],
-                    service.serviceEndpoint()
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[1];
             // 每次直接覆盖action,使用方法名作为action,注意会覆盖掉之前的action值, 造成BaseMessage的action字段信息不太正确,此问题只存在于rpc调用场景
@@ -72,12 +69,13 @@ public class NatsInvocationHandler implements InvocationHandler {
             req = objectMapper.writeValueAsBytes(msg);
         }
 
+        String prefix = SpringEnvironmentHolder.resolvePlaceholders(service.servicePrefix());
         if (args.length == 2 && (args[0] instanceof String) == false) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
                     serviceName,
-                    service.servicePrefix(),
-                    service.serviceEndpoint()
+                    prefix,
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[0];
             // 每次直接覆盖action,使用方法名作为action,注意会覆盖掉之前的action值, 造成BaseMessage的action字段信息不太正确,此问题只存在于rpc调用场景
@@ -90,8 +88,8 @@ public class NatsInvocationHandler implements InvocationHandler {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
                     serviceName,
-                    service.servicePrefix(),
-                    service.serviceEndpoint()
+                    prefix,
+                    endpoint
 
             );
             BaseMessage msg = (BaseMessage) args[0];

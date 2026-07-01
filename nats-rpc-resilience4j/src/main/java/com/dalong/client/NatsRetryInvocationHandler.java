@@ -81,16 +81,14 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
 
     private RequestContext resolveRequestContext(Method method, Object[] args, RpcClient service) throws Exception {
         RequestContext requestContext = new RequestContext();
-        String serviceName = service.serviceName();
-        if (serviceName.matches(".*\\$\\{.*\\}.*")) {
-            serviceName = SpringEnvironmentHolder.resolvePlaceholders(serviceName);
-        }
+        String serviceName = SpringEnvironmentHolder.resolvePlaceholders(service.serviceName());
+        String endpoint = SpringEnvironmentHolder.resolvePlaceholders(service.serviceEndpoint());
         if (args.length == 3 && args[0] instanceof String) {
             requestContext.subject = String.format(
                     SERVICE_ENDPOINT_SUBJECT_FORMAT,
                     serviceName,
                     args[0],
-                    service.serviceEndpoint()
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[1];
             msg.setAction(method.getName());
@@ -104,7 +102,7 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
                     SERVICE_ENDPOINT_SUBJECT_FORMAT,
                     serviceName,
                     args[0],
-                    service.serviceEndpoint()
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[1];
             msg.setAction(method.getName());
@@ -112,12 +110,13 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
             return requestContext;
         }
 
+        String prefix = SpringEnvironmentHolder.resolvePlaceholders(service.servicePrefix());
         if (args.length == 2 && !(args[0] instanceof String)) {
             requestContext.subject = String.format(
                     SERVICE_ENDPOINT_SUBJECT_FORMAT,
                     serviceName,
-                    service.servicePrefix(),
-                    service.serviceEndpoint()
+                    prefix,
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[0];
             msg.setAction(method.getName());
@@ -130,8 +129,8 @@ public class NatsRetryInvocationHandler implements InvocationHandler {
             requestContext.subject = String.format(
                     SERVICE_ENDPOINT_SUBJECT_FORMAT,
                     serviceName,
-                    service.servicePrefix(),
-                    service.serviceEndpoint()
+                    s,
+                    endpoint
             );
             BaseMessage msg = (BaseMessage) args[0];
             msg.setAction(method.getName());
