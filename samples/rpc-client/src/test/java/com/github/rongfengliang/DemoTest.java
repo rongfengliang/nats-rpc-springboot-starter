@@ -24,9 +24,9 @@ public class DemoTest {
         message.setAge(30);
 
         // Call the default handler
-        String greeting = demoApi.defaultMessageHandler(message, new Headers().add("type", "demo"));
-        System.out.println(greeting);  // Output: Hello, Alice
-
+        demoApi.defaultMessageHandler(message, new Headers().add("type", "demo"));
+        //System.out.println(greeting);  // Output: Hello, Alice
+        System.out.println("defaultMessageHandler called, no awaiting.");
         // Call the getRoles action
         List<String> roles = demoApi.getRoles(message);
         System.out.println(roles);  // Output: [admin, user, guest]

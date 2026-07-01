@@ -1,12 +1,14 @@
 package com.dalong.reactorclient;
 
 import com.dalong.client.RpcClient;
+import com.dalong.helper.SpringEnvironmentHolder;
 import com.dalong.models.BaseMessage;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.nats.client.Connection;
 import io.nats.client.Message;
 import io.nats.client.impl.Headers;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -18,6 +20,7 @@ import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 public class NatsInvocationReactorHandler implements InvocationHandler {
     private final Connection nats;
     private final ObjectMapper objectMapper;
@@ -42,10 +45,15 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
         String subject = "";
         byte[] req = null;
         Headers headers = null;
+        String serviceName = service.serviceName();
+        if (serviceName.matches(".*\\$\\{.*\\}.*")) {
+            serviceName = SpringEnvironmentHolder.resolvePlaceholders(serviceName);
+            log.debug("RPC service name resolved to: {}", serviceName);
+        }
         if (args.length == 3 && (args[0] instanceof String)) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
-                    service.serviceName(),
+                    serviceName,
                     (String) args[0],
                     service.serviceEndpoint()
             );
@@ -59,7 +67,7 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
         if (args.length == 2 && (args[0] instanceof String)) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
-                    service.serviceName(),
+                    serviceName,
                     (String) args[0],
                     service.serviceEndpoint()
             );
@@ -73,7 +81,7 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
         if (args.length == 2 && (args[0] instanceof String) == false) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
-                    service.serviceName(),
+                    serviceName,
                     service.servicePrefix(),
                     service.serviceEndpoint()
             );
@@ -87,7 +95,7 @@ public class NatsInvocationReactorHandler implements InvocationHandler {
         if (args.length == 1) {
             subject = String.format(
                     serviceEndpointSubjectFormatt,
-                    service.serviceName(),
+                    serviceName,
                     service.servicePrefix(),
                     service.serviceEndpoint()
 

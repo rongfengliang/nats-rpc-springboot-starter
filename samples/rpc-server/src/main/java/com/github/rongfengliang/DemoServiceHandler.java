@@ -42,6 +42,12 @@ public class DemoServiceHandler extends AbstractServiceHandler<DemoMessage> {
     public Object defaultMessageHandler(DemoMessage message, Headers headers) {
         // Default handler - processes requests when no specific action is specified
         log.info("Received message: {}, headers: {}", message,  headers);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            log.error("Error sleeping", e);
+        }
+        log.info("Processed message: {}", message);
         return "Hello, " + message.getName();
     }
 
